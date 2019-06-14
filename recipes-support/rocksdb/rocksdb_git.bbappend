@@ -10,6 +10,6 @@ FILES_${PN} += " \
 
 do_install_append(){
     install -d ${D}${libdir}/cmake/rocksdb
-    cp ${WORKDIR}/RocksdbTargets-release.cmake ${D}${libdir}/cmake/rocksdb
+    cp ${WORKDIR}/RocksDBTargets-release.cmake ${D}${libdir}/cmake/rocksdb
 }
 
