@@ -11,6 +11,12 @@ S = "${WORKDIR}/git"
 SRC_URI = "git://github.com/jbeder/${PN}.git;branch=master;protocol=git"
 SRCREV = "562aefc114938e388457e6a531ed7b54d9dc1b62"
 
+SRC_URI += " \
+    file://yaml-cppConfig.cmake \
+    file://yaml-cppConfigVersion.cmake \
+    file://yaml-cppTargets.cmake \
+    file://yaml-cppTargets-release.cmake \
+"
 
 EXTRA_OECMAKE = "-DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF"
 
@@ -23,3 +29,15 @@ FILES_${PN}-gtest += " \
     ${libdir}/libgtest.so \
     ${libdir}/libgmock.so \
 "
+
+FILES_${PN} += " \
+    /usr/lib/yaml-cpp/cmake \
+"
+
+do_install_append(){
+    install -d ${D}${libdir}/cmake/yaml-cpp
+    cp ${WORKDIR}/yaml-cppConfig.cmake ${D}${libdir}/cmake/yaml-cpp
+    cp ${WORKDIR}/yaml-cppConfigVersion.cmake ${D}${libdir}/cmake/yaml-cpp
+    cp ${WORKDIR}/yaml-cppTargets.cmake ${D}${libdir}/cmake/yaml-cpp
+    cp ${WORKDIR}/yaml-cppTargets-release.cmake ${D}${libdir}/cmake/yaml-cpp
+}
