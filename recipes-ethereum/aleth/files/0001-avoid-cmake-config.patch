@@ -1,0 +1,63 @@
+From f569cf4db892ec2a71983a30be6a6c3e30a46f43 Mon Sep 17 00:00:00 2001
+From: bernardo araujo rodrigues <bernardo.araujo@silicon-gears.com>
+Date: Fri, 14 Jun 2019 15:56:08 +0000
+Subject: [PATCH] avoid cmake config
+
+---
+ CMakeLists.txt      | 14 +++++++-------
+ test/CMakeLists.txt |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54769fe..1ec0c7f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,25 +63,25 @@ include(EthUtils)
+ set(Boost_USE_STATIC_LIBS ON)
+ set(Boost_USE_MULTITHREADED ON)
+ hunter_add_package(Boost COMPONENTS program_options filesystem system thread context fiber log)
+-find_package(Boost CONFIG REQUIRED program_options filesystem system thread context fiber log)
++find_package(Boost REQUIRED program_options filesystem system thread context fiber log)
+ 
+ hunter_add_package(jsoncpp)
+-find_package(jsoncpp CONFIG REQUIRED)
++find_package(jsoncpp REQUIRED)
+ 
+ hunter_add_package(Snappy)
+-find_package(Snappy CONFIG REQUIRED)
++find_package(Snappy REQUIRED)
+ 
+ hunter_add_package(cryptopp)
+-find_package(cryptopp CONFIG REQUIRED)
++find_package(cryptopp REQUIRED)
+ 
+ hunter_add_package(libjson-rpc-cpp)
+-find_package(libjson-rpc-cpp CONFIG REQUIRED)
++find_package(libjson-rpc-cpp REQUIRED)
+ 
+ hunter_add_package(libscrypt)
+-find_package(libscrypt CONFIG REQUIRED)
++find_package(libscrypt REQUIRED)
+ 
+ hunter_add_package(ethash)
+-find_package(ethash CONFIG REQUIRED)
++find_package(ethash REQUIRED)
+ 
+ include(ProjectSecp256k1)
+ include(ProjectLibFF)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 7847488..d3e1467 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -102,7 +102,7 @@ foreach(file ${sources})
+ endforeach(file)
+ 
+ hunter_add_package(yaml-cpp)
+-find_package(yaml-cpp CONFIG REQUIRED)
++find_package(yaml-cpp REQUIRED)
+ 
+ add_executable(testeth ${sources})
+ target_include_directories(testeth PRIVATE ${UTILS_INCLUDE_DIR})
+-- 
+2.7.4
+
