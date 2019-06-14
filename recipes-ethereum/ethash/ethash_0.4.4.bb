@@ -1,5 +1,4 @@
 # Copyright (C) 2019 Bernardo Rodrigues <bernardoar@protonmail.com>
-# Released under the GPLv3 license (see LINCENSE for the terms)
 
 SUMMARY = "C/C++ implementation of Ethash – the Ethereum Proof of Work algorithm"
 HOMEPAGE = "https://github.com/ethereum/wiki/wiki/Ethash/"
