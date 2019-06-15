@@ -12,3 +12,5 @@ inherit go
 GO_IMPORT = "github.com/ethereum/go-ethereum"
 
 LDFLAGS += "-lpthread"
+
+RDEPENDS_${PN}-dev += "gawk bash"
