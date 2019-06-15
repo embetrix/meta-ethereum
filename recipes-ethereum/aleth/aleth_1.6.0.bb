@@ -10,6 +10,7 @@ GCCVERSION = "5.2%"
 
 SRC_URI = "\
 	   gitsm://github.com/ethereum/aleth.git;tag=v1.6.0 \
+	   file://0001-avoid-cmake-config.patch \
 	   file://0002-fix-gtest_main.patch \
 	   file://BoostConfig.cmake \
 	   file://Findjsoncpp.cmake \
@@ -41,6 +42,7 @@ do_populate_cmake(){
     cp ${WORKDIR}/FindMHD.cmake ${S}/cmake
     cp ${WORKDIR}/Findsnappy.cmake ${S}/cmake
     cp ${WORKDIR}/Findleveldb.cmake ${S}/cmake
+    cp ${WORKDIR}/Findjsoncpp.cmake ${S}/cmake
 }
 
 addtask do_populate_cmake after do_unpack before do_configure
