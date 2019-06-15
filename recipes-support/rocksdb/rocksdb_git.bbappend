@@ -1,4 +1,4 @@
-CXXFLAGS += "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
+#CXXFLAGS += "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
 
 SRC_URI += "file://RocksDBTargets-release.cmake"
 

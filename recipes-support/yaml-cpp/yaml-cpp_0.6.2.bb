@@ -34,10 +34,10 @@ FILES_${PN} += " \
     /usr/lib/yaml-cpp/cmake \
 "
 
-do_install_append(){
-    install -d ${D}${libdir}/cmake/yaml-cpp
-    cp ${WORKDIR}/yaml-cppConfig.cmake ${D}${libdir}/cmake/yaml-cpp
-    cp ${WORKDIR}/yaml-cppConfigVersion.cmake ${D}${libdir}/cmake/yaml-cpp
-    cp ${WORKDIR}/yaml-cppTargets.cmake ${D}${libdir}/cmake/yaml-cpp
-    cp ${WORKDIR}/yaml-cppTargets-release.cmake ${D}${libdir}/cmake/yaml-cpp
-}
+#do_install_append(){
+#    install -d ${D}${libdir}/cmake/yaml-cpp
+#    cp ${WORKDIR}/yaml-cppConfig.cmake ${D}${libdir}/cmake/yaml-cpp
+#    cp ${WORKDIR}/yaml-cppConfigVersion.cmake ${D}${libdir}/cmake/yaml-cpp
+#    cp ${WORKDIR}/yaml-cppTargets.cmake ${D}${libdir}/cmake/yaml-cpp
+#    cp ${WORKDIR}/yaml-cppTargets-release.cmake ${D}${libdir}/cmake/yaml-cpp
+#}

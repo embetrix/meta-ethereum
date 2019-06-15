@@ -14,7 +14,6 @@ FILES_${PN} += " \
 do_install_append(){
     install -d ${D}${libdir}/leveldb/cmake
     cp ${WORKDIR}/leveldbConfig.cmake ${D}${libdir}/leveldb/cmake
-    cp ${WORKDIR}/leveldbConfigVersion.cmake ${D}${libdir}/leveldb/cmake
     cp ${WORKDIR}/leveldbTargets.cmake ${D}${libdir}/leveldb/cmake
     cp ${WORKDIR}/leveldbTargets-release.cmake ${D}${libdir}/leveldb/cmake
 }
