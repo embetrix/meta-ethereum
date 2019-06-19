@@ -43,7 +43,7 @@ MACHINE = "beaglebone-yocto"
 
 GOVERSION = "1.10%"
 
-IMAGE_INSTALL_append = "geth"
+IMAGE_INSTALL_append = " geth openssh"
 ```
 
 Build a core-image-minimal image:
@@ -247,14 +247,51 @@ Address: {f1c0fc4fd943c8664436bf7f3fc75800754b60fd}
 
 ```
 
-Start a light node on the host, with support for WebSockets:
+Start a light node on the host, with support for WebSockets. Here, `192.168.1.34` is my host's IP address inside my LAN. Use `$ ifconfig` to check your own. Also, `wsorigins` is used so our node accepts websockets requests from the BBB:
 ```
-$ geth --syncmode "light" --ws
+$ geth --syncmode "light" --ws --wsaddr "192.168.1.34" --wsorigins "http://beaglebone-yocto"
+
 ```
 
-Back to the BBB (on minicom), use geth to attach to the host's light node:
+Let's get back to the BBB (on minicom), check its IP address:
 ```
-# geth attach ws://<host's IP inside the LAN>:8546
+# ifconfig
+eth0      Link encap:Ethernet  HWaddr 78:A5:04:DC:8E:58  
+          inet addr:192.168.1.35  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::7aa5:4ff:fedc:8e58/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:18 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:11 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1924 (1.8 KiB)  TX bytes:1470 (1.4 KiB)
+          Interrupt:45 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+```
+
+Open a new terminal, and connect to the BBB via ssh:
+
+```
+$ ssh root@192.168.1.35
+The authenticity of host '192.168.1.35 (192.168.1.35)' can't be established.
+ECDSA key fingerprint is SHA256:CJXKu2BfUblmjpx4Pf0aF5ziBAXx62X8WfHA0/Q4/W8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.1.35' (ECDSA) to the list of known hosts.
+Last login: Wed Jun 19 17:48:00 2019
+
+```
+
+On the BBB (via ssh) use geth to attach to the host's light node:
+```
+# geth attach ws://192.168.1.34:8546
 ```
 
 Finally, print some information on geth's console from the BBB:
