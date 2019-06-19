@@ -42,6 +42,12 @@ After we start the development of recipes for **parity** in the near future, it 
 Please note that in order to build **geth**, you need to set ```GOVERSION = "1.10%"``` inside your conf/local.conf. This is because sumo sets 1.9 as its default Go version, but **geth** needs to be built with 1.10 or higher to avoid some compilation problems.
 
 ---
+## Tutorials
+You can find some tutorials in the `docs` folder:
+
+ - [Testing geth on a BeagleBone Black](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/bbb_tutorial.md) ([YouTube](TODO))
+
+---
 ## License
 
 meta-ethereum is released under the [GPLv3](https://github.com/bernardoaraujor/meta-ethereum/blob/master/LICENSE).
