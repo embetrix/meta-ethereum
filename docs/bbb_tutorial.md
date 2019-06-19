@@ -1,6 +1,4 @@
-Prepare your host for yocto development:
-
-https://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#detailed-supported-distros
+Prepare your host for yocto development. Refer to [Yocto's official documentation](https://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#detailed-supported-distros) for more details on setting up.
 
 Assuming you are using Ubuntu (16.04 or 18.04):
 ```
@@ -46,7 +44,6 @@ MACHINE = "beaglebone-yocto"
 GOVERSION = "1.10%"
 
 IMAGE_INSTALL_append = "geth"
-
 ```
 
 Build a core-image-minimal image:
@@ -231,7 +228,7 @@ Power up the board and stop uboot by pressing space. Type the following commands
 
 Now you are inside the board! Connect an Ethernet cable to a LAN router that's also connected to your host. Make sure the router has UPnP enabled.
 
-Open another terminal and install the go-ethereum package:
+Open another terminal and install the go-ethereum package to your development host:
 ```
 $ sudo apt-get install software-properties-common
 $ sudo add-apt-repository -y ppa:ethereum/ethereum
@@ -250,14 +247,14 @@ Address: {f1c0fc4fd943c8664436bf7f3fc75800754b60fd}
 
 ```
 
-Start a light node on the host, with HTTP-RPC support for WebSockets:
+Start a light node on the host, with support for WebSockets:
 ```
-$ geth --syncmode "light" --rpc --ws
+$ geth --syncmode "light" --ws
 ```
 
 Back to the BBB (on minicom), use geth to attach to the host's light node:
 ```
-# geth attach http://<host's IP inside the LAN>:8545
+# geth attach ws://<host's IP inside the LAN>:8546
 ```
 
 Finally, print some information on geth's console from the BBB:
@@ -272,12 +269,18 @@ true
 > eth.accounts
 ["0xf1c0fc4fd943c8664436bf7f3fc75800754b60fd"]
 #same wallet address that we created on the host
+> eth.getBalance(eth.accounts[0])
+0
 > eth.blockNumber
 7985956
-(wait some minutes, then try to see the blockNumber again)
+#wait some minutes, then try to see the blockNumber again
 > eth.blockNumber
 7985960
 > eth.gasPrice
 4000000000
 
 ```
+
+That's it! You have connected your BBB to the Ethereum Blockchain!
+Of course, real smart contracts and relevant interactions would take a lot more work. This tutorial is meant to act as a proof of concept of meta-ethereum.
+
