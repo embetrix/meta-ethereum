@@ -20,6 +20,8 @@ FILES_${PN} = " \
 		/usr/lib/libscrypt/cmake \
 "
 
+CFLAGS_append = "-fPIC"
+
 do_install(){
     install -d ${D}${libdir}
     cp ${S}/libscrypt.a ${D}${libdir}
