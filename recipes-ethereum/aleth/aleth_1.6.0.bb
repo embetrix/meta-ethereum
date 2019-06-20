@@ -46,8 +46,6 @@ do_populate_cmake(){
     cp ${WORKDIR}/cryptoppTargets.cmake ${S}/cmake
     cp ${WORKDIR}/libjson-rpc-cppConfig.cmake ${S}/cmake
     cp ${WORKDIR}/libjson-rpc-cppTargets.cmake ${S}/cmake
-    cp ${WORKDIR}/yaml-cppConfig.cmake ${S}/cmake
-    cp ${WORKDIR}/yaml-cppTargets.cmake ${S}/cmake
 }
 
 addtask do_populate_cmake after do_unpack before do_configure
