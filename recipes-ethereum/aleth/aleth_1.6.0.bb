@@ -10,24 +10,27 @@ GCCVERSION = "5.2%"
 
 SRC_URI = "\
 	   gitsm://github.com/ethereum/aleth.git;tag=v1.6.0 \
-	   file://0001-avoid-cmake-config.patch \
 	   file://0002-fix-gtest_main.patch \
 	   file://BoostConfig.cmake \
-	   file://Findjsoncpp.cmake \
-	   file://Findcryptopp.cmake \
-	   file://FindMHD.cmake \
-	   file://Findleveldb.cmake \
-	   file://Findsnappy.cmake \
-	   file://Findyaml-cpp.cmake \
+	   file://BoostTargets.cmake \
+	   file://cryptoppConfig.cmake \
+	   file://cryptoppTargets.cmake \
+	   file://libjson-rpc-cppConfig.cmake \
+	   file://libjson-rpc-cppTargets.cmake \
 	  "
 
 S = "${WORKDIR}/git"
 
-BOOST_INCLUDEDIR = "${RECIPE_SYSROOT}/usr/include/boost"
-BOOST_LIBRARYDIR = "${RECIPE_SYSROOT}/usr/lib"
+CMAKE_WORK_DIR = "${S}/cmake"
 
 EXTRA_OECMAKE += "\
                    -DHUNTER_ENABLED=OFF \
+		   -DTESTS=OFF \
+		   -DCMAKE_BUILD_TYPE=Release \
+		   -DCMAKE_SYSROOT=${RECIPE_SYSROOT} \
+		   -DBoost_DIR=${CMAKE_WORK_DIR} \
+		   -Dcryptopp_DIR=${CMAKE_WORK_DIR} \
+		   -Dlibjson-rpc-cpp_DIR=${CMAKE_WORK_DIR} \
 "
 
 inherit cmake
@@ -38,11 +41,13 @@ OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
 do_populate_cmake(){
     cp ${WORKDIR}/BoostConfig.cmake ${S}/cmake
-    cp ${WORKDIR}/Findcryptopp.cmake ${S}/cmake
-    cp ${WORKDIR}/FindMHD.cmake ${S}/cmake
-    cp ${WORKDIR}/Findsnappy.cmake ${S}/cmake
-    cp ${WORKDIR}/Findleveldb.cmake ${S}/cmake
-    cp ${WORKDIR}/Findjsoncpp.cmake ${S}/cmake
+    cp ${WORKDIR}/BoostTargets.cmake ${S}/cmake
+    cp ${WORKDIR}/cryptoppConfig.cmake ${S}/cmake
+    cp ${WORKDIR}/cryptoppTargets.cmake ${S}/cmake
+    cp ${WORKDIR}/libjson-rpc-cppConfig.cmake ${S}/cmake
+    cp ${WORKDIR}/libjson-rpc-cppTargets.cmake ${S}/cmake
+    cp ${WORKDIR}/yaml-cppConfig.cmake ${S}/cmake
+    cp ${WORKDIR}/yaml-cppTargets.cmake ${S}/cmake
 }
 
 addtask do_populate_cmake after do_unpack before do_configure
