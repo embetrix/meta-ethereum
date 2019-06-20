@@ -1,47 +1,69 @@
+# Copyright (c) 2017, Ruslan Baratov
+# All rights reserved.
 
-####### Expanded from @PACKAGE_INIT@ by configure_package_config_file() #######
-####### Any changes to this file will be overwritten by the next CMake run ####
-####### The input file was libjson-rpc-cppConfig.cmake.in                            ########
+if(NOT TARGET libjson-rpc-cpp::common)
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
 
-get_filename_component(PACKAGE_PREFIX_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../" ABSOLUTE)
-
-macro(set_and_check _var _file)
-  set(${_var} "${_file}")
-  if(NOT EXISTS "${_file}")
-    message(FATAL_ERROR "File or directory ${_file} referenced by variable ${_var} does not exist !")
+  find_library(_jsonrpccpp_lib NAMES jsonrpccpp-common)
+  if(NOT _jsonrpccpp_lib)
+    message(FATAL_ERROR "Library not found")
   endif()
-endmacro()
 
-macro(check_required_components _NAME)
-  foreach(comp ${${_NAME}_FIND_COMPONENTS})
-    if(NOT ${_NAME}_${comp}_FOUND)
-      if(${_NAME}_FIND_REQUIRED_${comp})
-        set(${_NAME}_FOUND FALSE)
-      endif()
-    endif()
-  endforeach()
-endmacro()
+  add_library(libjson-rpc-cpp::common UNKNOWN IMPORTED)
 
-####################################################################################
+  set_target_properties(
+      libjson-rpc-cpp::common
+      PROPERTIES
+      IMPORTED_LOCATION "${_jsonrpccpp_lib}"
+  )
 
-include(CMakeFindDependencyMacro)
-
-find_dependency(Threads)
-
-if(ON)
-  find_package(jsoncpp CONFIG REQUIRED)
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
 endif()
 
-if(NO)
-  if(ON)
-    find_package(CURL CONFIG REQUIRED)
-  else()
-    find_dependency(CURL)
+if(NOT TARGET libjson-rpc-cpp::client)
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
+
+  find_library(_jsonrpccpp_lib NAMES jsonrpccpp-client)
+  if(NOT _jsonrpccpp_lib)
+    message(FATAL_ERROR "Library not found")
   endif()
+
+  add_library(libjson-rpc-cpp::client UNKNOWN IMPORTED)
+
+  set_target_properties(
+      libjson-rpc-cpp::client
+      PROPERTIES
+      IMPORTED_LOCATION "${_jsonrpccpp_lib}"
+      INTERFACE_LINK_LIBRARIES libjson-rpc-cpp::common
+  )
+
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
 endif()
 
-if(NO)
-  find_dependency(MHD)
+if(NOT TARGET libjson-rpc-cpp::server)
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
+
+  find_library(_jsonrpccpp_lib NAMES jsonrpccpp-server)
+  if(NOT _jsonrpccpp_lib)
+    message(FATAL_ERROR "Library not found")
+  endif()
+
+  add_library(libjson-rpc-cpp::server UNKNOWN IMPORTED)
+
+  set_target_properties(
+      libjson-rpc-cpp::server
+      PROPERTIES
+      IMPORTED_LOCATION "${_jsonrpccpp_lib}"
+      INTERFACE_LINK_LIBRARIES libjson-rpc-cpp::server
+  )
+
+  unset(_jsonrpccpp_lib)
+  unset(_jsonrpccpp_lib CACHE)
 endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/libjson-rpc-cppTargets.cmake)
+include("${CMAKE_CURRENT_LIST_DIR}/libjson-rpc-cppTargets.cmake")
