@@ -2,7 +2,7 @@
 
 ![meta-ethereum](https://github.com/bernardoaraujor/meta-ethereum/raw/master/meta-ethereum.png  "meta-ethereum")
 
-The upcoming wave of blockchain-enabled IoT devices is creating a rising demand for embedded support for the [Ethereum](https://www.ethereum.org/) protocol. Examples of projects that aim to run Ethereum inside embedded systems are:
+The upcoming wave of blockchain-enabled IoT devices is creating a rising demand for embedded support of the [Ethereum](https://www.ethereum.org/) protocol. Examples of projects that aim to run Ethereum inside embedded systems are:
 
  * **EthRaspbian**: <https://ethraspbian.com>
  * **cpp-ethereum-cross**: <https://github.com/doublethinkco/cpp-ethereum-cross/>
