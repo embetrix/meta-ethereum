@@ -1,0 +1,243 @@
+From 3e0d6d29948c0e516c5fc82853fe69cb4aa01566 Mon Sep 17 00:00:00 2001
+From: bernardo araujo rodrigues <bernardo.araujo@silicon-gears.com>
+Date: Fri, 21 Jun 2019 14:05:48 +0200
+Subject: [PATCH] remove CMake ExternalProjects dependency
+
+---
+ CMakeLists.txt               |  6 ++--
+ cmake/ProjectBinaryen.cmake  | 74 --------------------------------------------
+ cmake/ProjectLibFF.cmake     | 37 ----------------------
+ cmake/ProjectMPIR.cmake      | 25 ---------------
+ cmake/ProjectSecp256k1.cmake | 39 -----------------------
+ 5 files changed, 3 insertions(+), 178 deletions(-)
+ delete mode 100644 cmake/ProjectBinaryen.cmake
+ delete mode 100644 cmake/ProjectLibFF.cmake
+ delete mode 100644 cmake/ProjectMPIR.cmake
+ delete mode 100644 cmake/ProjectSecp256k1.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54769fe..16bd2ee 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,8 +83,8 @@ find_package(libscrypt CONFIG REQUIRED)
+ hunter_add_package(ethash)
+ find_package(ethash CONFIG REQUIRED)
+ 
+-include(ProjectSecp256k1)
+-include(ProjectLibFF)
++find_package(Secp256k1 REQUIRED)
++find_package(LibFF REQUIRED)
+ 
+ find_package(Threads)
+ 
+@@ -99,7 +99,7 @@ configure_project()
+ if(TESTS)
+     # Import binaryen library for testeth.
+     # TODO: remove this once testeth uses binaryen as a CLI tool.
+-    include(ProjectBinaryen)
++    find_package(Binaryen REQUIRED)
+ endif()
+ 
+ add_subdirectory(evmc)
+diff --git a/cmake/ProjectBinaryen.cmake b/cmake/ProjectBinaryen.cmake
+deleted file mode 100644
+index 49993d4..0000000
+--- a/cmake/ProjectBinaryen.cmake
++++ /dev/null
+@@ -1,74 +0,0 @@
+-if(ProjectBinaryenIncluded)
+-    return()
+-endif()
+-set(ProjectBinaryenIncluded TRUE)
+-
+-include(ExternalProject)
+-
+-if(MSVC)
+-    # Overwrite build and install commands to force Release build on MSVC.
+-    set(build_command BUILD_COMMAND cmake --build <BINARY_DIR> --config Release)
+-    set(install_command INSTALL_COMMAND cmake --build <BINARY_DIR> --config Release --target install)
+-elseif(CMAKE_GENERATOR STREQUAL Ninja)
+-    # For Ninja we have to pass the number of jobs from CI environment.
+-    # Otherwise it will go crazy and run out of memory.
+-    if($ENV{BUILD_PARALLEL_JOBS})
+-        set(build_command BUILD_COMMAND cmake --build <BINARY_DIR> -- -j $ENV{BUILD_PARALLEL_JOBS})
+-        message(STATUS "Ninja $ENV{BUILD_PARALLEL_JOBS}")
+-    endif()
+-endif()
+-
+-set(prefix ${CMAKE_BINARY_DIR}/deps)
+-set(source_dir ${prefix}/src/binaryen)
+-set(binary_dir ${prefix}/src/binaryen-build)
+-# Use source dir because binaryen only installs single header with C API.
+-set(binaryen_include_dir ${source_dir}/src)
+-set(binaryen_library ${prefix}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}binaryen${CMAKE_STATIC_LIBRARY_SUFFIX})
+-# Include also other static libs needed:
+-set(binaryen_other_libraries
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}wasm${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}asmjs${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}passes${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}cfg${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}ir${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}emscripten-optimizer${CMAKE_STATIC_LIBRARY_SUFFIX}
+-    ${binary_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}support${CMAKE_STATIC_LIBRARY_SUFFIX}
+-)
+-
+-set(BINARYEN_VERSION 1.37.35)
+-
+-ExternalProject_Add(binaryen
+-    PREFIX ${prefix}
+-    DOWNLOAD_NAME binaryen-${BINARYEN_VERSION}.tar.gz
+-    DOWNLOAD_DIR ${prefix}/downloads
+-    SOURCE_DIR ${source_dir}
+-    BINARY_DIR ${binary_dir}
+-    URL https://github.com/WebAssembly/binaryen/archive/${BINARYEN_VERSION}.tar.gz
+-    URL_HASH SHA256=19439e41dc576446eaae0c4a8e07d4cd4c40aea7dfb0a6475b925686852f8006
+-    CMAKE_ARGS
+-    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+-    -DCMAKE_INSTALL_LIBDIR=lib
+-    -DCMAKE_BUILD_TYPE=Release
+-    -DBUILD_STATIC_LIB=ON
+-    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+-    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+-    -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+-    ${build_command}
+-    ${install_command}
+-    BUILD_BYPRODUCTS ${binaryen_library} ${binaryen_other_libraries}
+-)
+-
+-add_library(binaryen::binaryen STATIC IMPORTED)
+-
+-file(MAKE_DIRECTORY ${binaryen_include_dir})  # Must exist.
+-set_target_properties(
+-    binaryen::binaryen
+-    PROPERTIES
+-    IMPORTED_CONFIGURATIONS Release
+-    IMPORTED_LOCATION_RELEASE ${binaryen_library}
+-    INTERFACE_INCLUDE_DIRECTORIES ${binaryen_include_dir}
+-    INTERFACE_LINK_LIBRARIES "${binaryen_other_libraries}"
+-
+-)
+-
+-add_dependencies(binaryen::binaryen binaryen)
+diff --git a/cmake/ProjectLibFF.cmake b/cmake/ProjectLibFF.cmake
+deleted file mode 100644
+index 658c9c1..0000000
+--- a/cmake/ProjectLibFF.cmake
++++ /dev/null
+@@ -1,37 +0,0 @@
+-include(ProjectMPIR)
+-
+-set(prefix "${CMAKE_BINARY_DIR}/deps")
+-set(libff_library "${prefix}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}ff${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-set(libff_inlcude_dir "${prefix}/include/libff")
+-
+-ExternalProject_Add(libff
+-    PREFIX "${prefix}"
+-    DOWNLOAD_NAME libff-03b719a7.tar.gz
+-    DOWNLOAD_NO_PROGRESS TRUE
+-    URL https://github.com/scipr-lab/libff/archive/03b719a7c81757071f99fc60be1f7f7694e51390.tar.gz
+-    URL_HASH SHA256=81b476089af43025c8f253cb1a9b5038a1c375baccffea402fa82042e608ab02
+-    CMAKE_ARGS
+-        -DCMAKE_BUILD_TYPE=Release
+-        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+-        -DGMP_INCLUDE_DIR=${MPIR_INCLUDE_DIR}
+-        -DGMP_LIBRARY=${MPIR_LIBRARY}
+-        -DCURVE=ALT_BN128 -DPERFORMANCE=Off -DWITH_PROCPS=Off
+-        -DUSE_PT_COMPRESSION=Off
+-        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+-        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+-    BUILD_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release
+-    LOG_BUILD 1
+-    INSTALL_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release --target install
+-    BUILD_BYPRODUCTS "${libff_library}"
+-)
+-add_dependencies(libff mpir)
+-
+-# Create snark imported library
+-add_library(libff::ff STATIC IMPORTED)
+-file(MAKE_DIRECTORY ${libff_inlcude_dir})
+-set_property(TARGET libff::ff PROPERTY IMPORTED_CONFIGURATIONS Release)
+-set_property(TARGET libff::ff PROPERTY IMPORTED_LOCATION_RELEASE ${libff_library})
+-set_property(TARGET libff::ff PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${libff_inlcude_dir})
+-set_property(TARGET libff::ff PROPERTY INTERFACE_LINK_LIBRARIES MPIR::mpir)
+-add_dependencies(libff::ff libff)
+diff --git a/cmake/ProjectMPIR.cmake b/cmake/ProjectMPIR.cmake
+deleted file mode 100644
+index d69f9dc..0000000
+--- a/cmake/ProjectMPIR.cmake
++++ /dev/null
+@@ -1,25 +0,0 @@
+-include(ExternalProject)
+-
+-set(prefix "${CMAKE_BINARY_DIR}/deps")
+-set(MPIR_LIBRARY "${prefix}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}mpir${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-set(MPIR_INCLUDE_DIR "${prefix}/include")
+-
+-ExternalProject_Add(mpir
+-    PREFIX "${prefix}"
+-    DOWNLOAD_NAME mpir-cmake.tar.gz
+-    DOWNLOAD_NO_PROGRESS TRUE
+-    URL https://github.com/chfast/mpir/archive/cmake.tar.gz
+-    URL_HASH SHA256=d32ea73cb2d8115a8e59b244f96f29bad7ff03367162b660bae6495826811e06
+-    CMAKE_ARGS
+-        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+-        -DCMAKE_INSTALL_LIBDIR=lib
+-        -DCMAKE_BUILD_TYPE=Release
+-        -DMPIR_GMP=On
+-    BUILD_BYPRODUCTS "${MPIR_LIBRARY}"
+-)
+-
+-add_library(MPIR::mpir STATIC IMPORTED)
+-set_property(TARGET MPIR::mpir PROPERTY IMPORTED_CONFIGURATIONS Release)
+-set_property(TARGET MPIR::mpir PROPERTY IMPORTED_LOCATION_RELEASE ${MPIR_LIBRARY})
+-set_property(TARGET MPIR::mpir PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${MPIR_INCLUDE_DIR})
+-add_dependencies(MPIR::mpir mpir)
+diff --git a/cmake/ProjectSecp256k1.cmake b/cmake/ProjectSecp256k1.cmake
+deleted file mode 100644
+index 21f74b9..0000000
+--- a/cmake/ProjectSecp256k1.cmake
++++ /dev/null
+@@ -1,39 +0,0 @@
+-include(ExternalProject)
+-
+-if (MSVC)
+-    set(_only_release_configuration -DCMAKE_CONFIGURATION_TYPES=Release)
+-    set(_overwrite_install_command INSTALL_COMMAND cmake --build <BINARY_DIR> --config Release --target install)
+-endif()
+-
+-set(prefix "${CMAKE_BINARY_DIR}/deps")
+-set(SECP256K1_LIBRARY "${prefix}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}secp256k1${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-set(SECP256K1_INCLUDE_DIR "${prefix}/include")
+-
+-ExternalProject_Add(
+-    secp256k1
+-    PREFIX "${prefix}"
+-    DOWNLOAD_NAME secp256k1-ac8ccf29.tar.gz
+-    DOWNLOAD_NO_PROGRESS 1
+-    URL https://github.com/chfast/secp256k1/archive/ac8ccf29b8c6b2b793bc734661ce43d1f952977a.tar.gz
+-    URL_HASH SHA256=02f8f05c9e9d2badc91be8e229a07ad5e4984c1e77193d6b00e549df129e7c3a
+-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-        ${CMAKE_CURRENT_LIST_DIR}/secp256k1/CMakeLists.txt <SOURCE_DIR>
+-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+-               -DCMAKE_POSITION_INDEPENDENT_CODE=${BUILD_SHARED_LIBS}
+-               -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+-               -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+-               ${_only_release_configuration}
+-    LOG_CONFIGURE 1
+-    BUILD_COMMAND ""
+-    ${_overwrite_install_command}
+-    LOG_INSTALL 1
+-    BUILD_BYPRODUCTS "${SECP256K1_LIBRARY}"
+-)
+-
+-# Create imported library
+-add_library(Secp256k1 STATIC IMPORTED)
+-file(MAKE_DIRECTORY "${SECP256K1_INCLUDE_DIR}")  # Must exist.
+-set_property(TARGET Secp256k1 PROPERTY IMPORTED_CONFIGURATIONS Release)
+-set_property(TARGET Secp256k1 PROPERTY IMPORTED_LOCATION_RELEASE "${SECP256K1_LIBRARY}")
+-set_property(TARGET Secp256k1 PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${SECP256K1_INCLUDE_DIR}")
+-add_dependencies(Secp256k1 secp256k1)
+-- 
+2.7.4
+
