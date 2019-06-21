@@ -1,3 +1,7 @@
+This tutorial is meant to act as a proof of concept for meta-ethereum. Because the BeagleBone Black (BBB) is so popular, it's a good idea to use it to show some basic embedded interactions with the Ethereum blockchain.
+
+So, let's start.
+
 Prepare your host for yocto development. Refer to [Yocto's official documentation](https://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#detailed-supported-distros) for more details on setting up.
 
 Assuming you are using Ubuntu (16.04 or 18.04):
@@ -319,5 +323,10 @@ true
 ```
 
 That's it! You have connected your BBB to the Ethereum Blockchain!
-Of course, real smart contracts and relevant interactions would take a lot more work. This tutorial is meant to act as a proof of concept of meta-ethereum.
+Of course, real smart contracts and relevant interactions would take a lot more work. This tutorial is only meant to act as a proof of concept of meta-ethereum.
 
+---
+
+Copyright (C) 2019 Bernardo Rodrigues <bernardoar@protonmail.com>
+
+Released under [GPLv3](https://github.com/bernardoaraujor/meta-ethereum/blob/master/LICENSE).
