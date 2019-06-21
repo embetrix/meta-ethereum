@@ -1,0 +1,25 @@
+From 525edde3a7954e92bd1051ba7d52476527ec0d81 Mon Sep 17 00:00:00 2001
+From: bernardo araujo rodrigues <bernardo.araujo@silicon-gears.com>
+Date: Fri, 14 Jun 2019 15:57:03 +0000
+Subject: [PATCH] fix gtest_main
+
+---
+ test/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index d3e1467..747c0d9 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -38,7 +38,7 @@ add_executable(aleth-unittests ${unittest_sources})
+ target_include_directories(aleth-unittests PRIVATE ${UTILS_INCLUDE_DIR})
+ target_link_libraries(aleth-unittests PRIVATE
+     web3jsonrpc ethashseal devcrypto devcore
+-    GTest::gtest GTest::main
++    GTest::gtest GTest::gtest_main
+ )
+ gtest_add_tests(TARGET aleth-unittests TEST_PREFIX unittests/ TEST_LIST unittests)
+ set_tests_properties(${unittests} PROPERTIES TIMEOUT ${timeout})
+-- 
+2.7.4
+
