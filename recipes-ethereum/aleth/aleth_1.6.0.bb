@@ -18,6 +18,8 @@ SRC_URI = "\
 	   file://cryptoppTargets.cmake \
 	   file://libjson-rpc-cppConfig.cmake \
 	   file://libjson-rpc-cppTargets.cmake \
+	   file://FindLibFF.cmake \
+	   file://LibFFTargets.cmake \
            file://FindSecp256k1.cmake \
 	  "
 
@@ -33,11 +35,12 @@ EXTRA_OECMAKE += "\
 		   -DBoost_DIR=${CMAKE_WORK_DIR} \
 		   -Dcryptopp_DIR=${CMAKE_WORK_DIR} \
 		   -Dlibjson-rpc-cpp_DIR=${CMAKE_WORK_DIR} \
+		   -DLibFF_DIR=${CMAKE_WORK_DIR} \
 "
 
 inherit cmake
 
-DEPENDS = "boost jsoncpp snappy libcryptopp ethash jsonrpc libmicrohttpd scrypt leveldb rocksdb gtest yaml-cpp crc32c secp256k1"
+DEPENDS = "boost jsoncpp snappy libcryptopp ethash jsonrpc libmicrohttpd scrypt leveldb rocksdb gtest yaml-cpp crc32c secp256k1 libff"
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
@@ -48,6 +51,8 @@ do_populate_cmake(){
     cp ${WORKDIR}/cryptoppTargets.cmake ${S}/cmake
     cp ${WORKDIR}/libjson-rpc-cppConfig.cmake ${S}/cmake
     cp ${WORKDIR}/libjson-rpc-cppTargets.cmake ${S}/cmake
+    cp ${WORKDIR}/FindLibFF.cmake ${S}/cmake
+    cp ${WORKDIR}/LibFFTargets.cmake ${S}/cmake
     cp ${WORKDIR}/FindSecp256k1.cmake ${S}/cmake
 }
 
