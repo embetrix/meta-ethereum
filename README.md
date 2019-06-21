@@ -17,7 +17,6 @@ The **meta-ethereum** OpenEmbedded Layer aims to provide recipes for Ethereum re
 
 Currently, we aim to provide recipes for the following:
 
- * **libethash** [v0.4.4 - stable]: <https://github.com/ethereum/ethash>
  * **geth/go-ethereum** [v1.8.27 - stable]: <https://github.com/ethereum/go-ethereum>
  * **aleth/cpp-ethereum** [v1.6.0 - under development]: <https://github.com/ethereum/aleth>
  * **parity** [v2.4.6 - planned]: <https://github.com/paritytech/parity-ethereum>
