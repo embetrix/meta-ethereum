@@ -45,6 +45,7 @@ Please note that in order to build **geth**, you need to set ```GOVERSION = "1.1
 ## Tutorials
 You can find some tutorials in the `docs` folder:
 
+ - [Running geth on a QEMU MIPS 32 bits emulated machine](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/qemu_tutorial.md) ([YouTube](https://youtu.be/IZ6nDKGy7NA))
  - [Testing geth on a BeagleBone Black](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/bbb_tutorial.md) ([YouTube](TODO))
 
 ---

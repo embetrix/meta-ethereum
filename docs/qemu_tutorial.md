@@ -1,5 +1,7 @@
 This tutorial is meant to act as a proof of concept for meta-ethereum. Because I want to show the possibility of running the Ethereum blockchain on exotic architectures, we are going to focus on an emulated version of a MIPS 32 bits machine.
 
+You can find a video with a screencast of this tutorial on [YouTube](https://youtu.be/IZ6nDKGy7NA).
+
 So, let's start.
 
 Prepare your host for yocto development. Refer to [Yocto's official documentation](https://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#detailed-supported-distros) for more details on setting up.
