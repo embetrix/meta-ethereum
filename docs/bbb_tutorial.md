@@ -1,3 +1,5 @@
+# Running geth on a BeagleBone Black
+
 This tutorial is meant to act as a proof of concept for meta-ethereum. Because the BeagleBone Black (BBB) is so popular, it's a good idea to use it to show some basic embedded interactions with the Ethereum blockchain.
 
 So, let's start.
