@@ -42,7 +42,7 @@ BBLAYERS ?= " \
   "
 ```
 
-Inform BitBake that we want to build images for a BeagleBone, that want to use Go v1.10 (to avoid compilation issues from 1.9) and that we want geth to be included in the image build. We do this by adding the following variables to the end of `conf/local.conf`
+Inform BitBake that we want to build images for a QEMU MIPS 32 machine, that want to use Go v1.10 (to avoid compilation issues from 1.9) and that we want geth to be included in the image build. We do this by adding the following variables to the end of `conf/local.conf`
 ```
 ...
 MACHINE = "qemumips"
