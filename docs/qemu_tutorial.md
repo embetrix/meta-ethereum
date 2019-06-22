@@ -125,7 +125,7 @@ wlp3s0    Link encap:Ethernet  HWaddr c4:85:08:ae:34:18
 
 Start a light node on the host, with support for WebSockets by using the --ws and --wsaddr flags. Also, `wsorigins` is used so our node accepts websockets requests from the QEMU machine:
 ```
-$ geth --syncmode "light" --ws --wsaddr "192.168.1.34" --wsorigins "http://qemumips"
+$ geth --syncmode "light" --ws --wsaddr "192.168.1.7" --wsorigins "http://qemumips"
 
 ```
 
