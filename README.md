@@ -38,7 +38,6 @@ The meta-ethereum layer depends on:
 	
 After we start the development of recipes for **parity** in the near future, it is very likely that there will also be dependency to the **meta-rust** layer.	
 
-Please note that in order to build **geth**, you need to set ```GOVERSION = "1.10%"``` inside your conf/local.conf. This is because sumo sets 1.9 as its default Go version, but **geth** needs to be built with 1.10 or higher to avoid some compilation problems.
 
 ---
 ## Tutorials

@@ -42,12 +42,10 @@ BBLAYERS ?= " \
   "
 ```
 
-Inform BitBake that we want to build images for a QEMU MIPS 32 machine, that want to use Go v1.10 (to avoid compilation issues from 1.9) and that we want geth to be included in the image build. We do this by adding the following variables to the end of `conf/local.conf`
+Inform BitBake that we want to build images for a QEMU MIPS 32 machine and that we want geth to be included in the image build. We do this by adding the following variables to the end of `conf/local.conf`
 ```
 ...
 MACHINE = "qemumips"
-
-GOVERSION = "1.10%"
 
 IMAGE_INSTALL_append = " geth openssh"
 ```
@@ -79,7 +77,6 @@ Your new account is locked with a password. Please give a password. Do not forge
 Passphrase: 
 Repeat passphrase: 
 Address: {f1c0fc4fd943c8664436bf7f3fc75800754b60fd}
-
 ```
 
 Run ifconfig. Here, `192.168.7.1` is the IP address of the tap0 interface created on my host by QEMU. 
@@ -120,7 +117,6 @@ wlp3s0    Link encap:Ethernet  HWaddr c4:85:08:ae:34:18
           TX packets:1215879 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:1000 
           RX bytes:2141881174 (2.1 GB)  TX bytes:509655353 (509.6 MB)
-
 ```
 
 Start a light node on the host, with support for WebSockets by using the --ws and --wsaddr flags. Also, `wsorigins` is used so our node accepts websockets requests from the QEMU machine:
@@ -142,7 +138,6 @@ instance: Geth/v1.8.27-stable-4bcc0a37/linux-amd64/go1.10.4
  modules: eth:1.0 net:1.0 rpc:1.0 web3:1.0
 
 > 
-
 ```
 
 Finally, print some information on geth's console from the QEMU MIPS emulation:
@@ -166,7 +161,6 @@ true
 7985960
 > eth.gasPrice
 4000000000
-
 ```
 
 That's it! You have connected your QEMU MIPS emulation to the Ethereum Blockchain! Of course, real smart contracts and relevant interactions would take a lot more work. This tutorial is only meant to act as a proof of concept of meta-ethereum.
