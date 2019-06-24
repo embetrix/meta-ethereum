@@ -70,7 +70,7 @@ $ bitbake core-image-minimal
 Setup a TFTP server on your host by installing tftpd-hpa package along with tftp tools:
 
 ```
-$ sudo apt-get install tftp tftpd-hpa
+$ sudo apt-get install tftp
 ```
 
 Copy `Image` and `Image-r8a7795-h3ulcb.dtb` to TFTP server root.
