@@ -2,7 +2,7 @@
 
 This tutorial is meant to act as a proof of concept for meta-ethereum. Because I want to show the possibility of running the Ethereum blockchain on Automotive applications, we are going to focus on an [RCar H3 Starter Kit](https://elinux.org/R-Car/Boards/H3SK).
 
-You can find a video with a screencast of this tutorial on [YouTube]().
+You can find a video with a screencast of this tutorial on [YouTube](https://www.youtube.com/watch?v=X7G0kdYsrg8).
 
 So, let's start.
 
@@ -273,4 +273,5 @@ That's it! You have connected your RCar H3 to the Ethereum Blockchain! Of course
 Copyright (C) 2019 Bernardo Rodrigues <bernardoar@protonmail.com>
 
 Released under [GPLv3](https://github.com/bernardoaraujor/meta-ethereum/blob/master/LICENSE).
+
 
