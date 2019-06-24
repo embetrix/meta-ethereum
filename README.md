@@ -44,9 +44,11 @@ After we start the development of recipes for **parity** in the near future, it 
 You can find some tutorials in the `docs` folder:
 
  - [Running geth on a QEMUlated machine](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/qemu_tutorial.md) ([YouTube](https://youtu.be/IZ6nDKGy7NA))
- - [Running geth on a BeagleBone Black](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/bbb_tutorial.md) ([YouTube](TODO))
+ - [Running geth on a BeagleBone Black](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/bbb_tutorial.md)
+ - [Running geth on an RCar H3 Starter Kit](https://github.com/bernardoaraujor/meta-ethereum/blob/master/docs/rcar_tutorial.md) ([YouTube](https://www.youtube.com/watch?v=X7G0kdYsrg8))
 
 ---
 ## License
 
 meta-ethereum is released under the [GPLv3](https://github.com/bernardoaraujor/meta-ethereum/blob/master/LICENSE).
+
