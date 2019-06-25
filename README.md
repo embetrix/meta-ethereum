@@ -30,11 +30,11 @@ The meta-ethereum layer depends on:
 
 	URI: git://git.openembedded.org/openembedded-core
 	layers: meta
-	branch: sumo
+	branch: rocko, sumo, thud, warrior
 
 	URI: git://git.openembedded.org/meta-openembedded
 	layers: meta-oe
-	branch: sumo
+	branch: rocko, sumo, thud, warrior
 	
 After we start the development of recipes for **parity** in the near future, it is very likely that there will also be dependency to the **meta-rust** layer.	
 
